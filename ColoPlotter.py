@@ -42,18 +42,25 @@ def ColoPlotter(input_dir, output_dir, name1, name2, threshold_p, search_gap, de
     mrate2_list = np.array([])
     for n, (img1, img2) in enumerate(read_input(input_dir)):
         # RGB to Grey and Merge
-        grey1 = rgb2gray(img1)
-        grey2 = rgb2gray(img2)
-        img_f1 = img_as_float(grey1)
-        img_f2 = img_as_float(grey2)
-        more1 = img_f1 > ThresholdGetter(img_f1, threshold_p, search_gap)
-        more2 = img_f2 > ThresholdGetter(img_f2, threshold_p, search_gap)
-        merge = more1 * more2
-        mrate1 = len(merge[merge == 1])/len(more1[more1 == 1]) * 100
-        mrate2 = len(merge[merge == 1])/len(more2[more2 == 1]) * 100
-        mrate1_list = np.append(mrate1_list, mrate1)
-        mrate2_list = np.append(mrate2_list, mrate2)
 
+        # 1
+        grey1 = rgb2gray(img1)
+        img_f1 = img_as_float(grey1)
+        more1 = img_f1 > ThresholdGetter(img_f1, threshold_p, search_gap)
+        # 2
+        grey2 = rgb2gray(img2)
+        img_f2 = img_as_float(grey2)
+        more2 = img_f2 > ThresholdGetter(img_f2, threshold_p, search_gap)
+        
+        merge = more1 * more2
+        # 1
+        mrate1 = len(merge[merge == 1])/len(more1[more1 == 1]) * 100
+        mrate1_list = np.append(mrate1_list, mrate1)
+        height1 = np.array([mrate1_list.mean()])
+        # 2
+        mrate2 = len(merge[merge == 1])/len(more2[more2 == 1]) * 100
+        mrate2_list = np.append(mrate2_list, mrate2)
+        height2 = np.array([mrate2_list.mean()])
 
         # Make Figure
         fig, axes = plt.subplots(figsize=(10, 10), nrows=2, ncols=3, subplot_kw={'adjustable': 'box-forced'})
@@ -82,22 +89,31 @@ def ColoPlotter(input_dir, output_dir, name1, name2, threshold_p, search_gap, de
         #Make Graph
         left = np.array([1])
         plt.figure(figsize=(2,4))
+        width = 1
         plt.style.use('ggplot')
         if denominator == '1':
-            height = np.array([mrate1_list.mean()])
+            height = height1
             sigma = sigma1
             label = [name2]
             plt.ylabel('% Colocalization\nwith {}'.format(name1))
-        else:
-            height = np.array([mrate2_list.mean()])
+        elif denominator == '2':
+            height = height2
             sigma = sigma2
             label = [name1]
             plt.ylabel('Colocalization\nwith {}'.format(name2))
+        elif denominator == '1,2':
+            width = 0.5
+            left = np.array([0.5, 1.5])
+            height = np.append(height1, height2)
+            sigma = np.append(sigma1, sigma2)
+            label = [name2, name1]
+            plt.ylabel('Colocalization\nwith {}, {}'.format(name2, name1))
+            
         # plt.title('Colocalization')
         plt.ylim(ymax = 100.0, ymin = 0)
         plt.xlim(xmax = 2.0, xmin = 0)
-        plt.bar(left, height, width=1, yerr=sigma, tick_label=label,capsize=10)
-        if denominator == 1:
+        plt.bar(left, height, width, yerr=sigma, tick_label=label, capsize=10)
+        if denominator == 1 or '1,2':
             plt.savefig(os.path.join(output_dir, "{}_{}_{}_bar.png".format(name1, name2, str(threshold_p))), format='png', bbox_inches='tight')
         else:
             plt.savefig(os.path.join(output_dir, "{}_{}_{}_bar.png".format(name2, name1, str(threshold_p))), format='png', bbox_inches='tight')
@@ -107,7 +123,7 @@ def ArgParse():
     parser = argparse.ArgumentParser(description='Get Colocalization Rate')
     parser.add_argument('-d', '--denominator',
                          dest='denominator',
-                         choices=['1', '2'],
+                         choices=['1', '2', '1,2'],
                          default='1',
                          help='Choose denominator "1" or "2".')
     parser.add_argument('-t', '--threshold',
