@@ -3,12 +3,12 @@
 
 from skimage import io
 from skimage import img_as_float
-from skimage import color
-from matplotlib import pyplot as plt
 from skimage.color import rgb2gray
+from matplotlib import pyplot as plt
 import os
 import argparse
 import numpy as np
+
 
 def read_input(input_dir):
     """
@@ -141,9 +141,9 @@ def ArgParse():
                         dest='out_dir',
                         default='result',
                         help='You can specify output dir.')
-
     args = parser.parse_args()
     return args
+
 
 if __name__ == "__main__":
     args = ArgParse()
