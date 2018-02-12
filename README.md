@@ -45,13 +45,18 @@ standard deviation = 30.300863
 #### output figures 
 Figure 1  
 <img src="https://github.com/nkimoto/ColoPlotter/blob/number_th/example/PGSM_16/Pep1_Sec7_5.0_1.png" alt="ex1" title="ex1" width="400px">  
+
 Figure 2  
 <img src="https://github.com/nkimoto/ColoPlotter/blob/number_th/example/PGSM_16/Pep1_Sec7_5.0_2.png" alt="ex2" title="ex1" width="400px">  
+
 Figure 3 (high background)  
 <img src="https://github.com/nkimoto/ColoPlotter/blob/number_th/example/PGSM_16/Pep1_Sec7_5.0_3.png" alt="ex3" title="ex1" width="400px">  
+
 Figure 4  
 <img src="https://github.com/nkimoto/ColoPlotter/blob/number_th/example/PGSM_16/Pep1_Sec7_5.0_4.png" alt="ex4" title="ex1" width="400px">  
+
 Figure 5  
 <img src="https://github.com/nkimoto/ColoPlotter/blob/number_th/example/PGSM_16/Pep1_Sec7_5.0_5.png" alt="ex5" title="ex1" width="400px">  
+
 Colocalization Rate Figure  
 <img src="https://github.com/nkimoto/ColoPlotter/blob/number_th/example/PGSM_16/Sec7_Pep1_5.0_bar.png" alt="ex5" title="ex1" width="400px">
