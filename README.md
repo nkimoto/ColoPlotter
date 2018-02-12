@@ -3,20 +3,20 @@ Calculate colocalization by max intensity.
 
 ImageJ's macro (PAS_colocalize3.ijm) by Python
 
-# Method 
+## Method 
 Convert intensity to float  
 → image thresholding by Max intensity   
 → Merge sample1 with sample2  
-→ Calculate colocalization rate (Error bar is *standard deviation*)
+→ Calculate colocalization rate (Error bar is *standard deviation*)  
 → Output figures
 
 
-# Usage
+## Usage
 ```
 ColoPlotter.py -d 1 -t 90.0 -n1 protein1 -n2 protein2 -sg 0.001 -in /path/to/input_dir -out /path/to/out_dir
 ```
 
-# Options 
+## Options 
 
 | OptionName | Default | Descrioption |
 |:-----------|:------------:|:------------|
@@ -28,18 +28,34 @@ ColoPlotter.py -d 1 -t 90.0 -n1 protein1 -n2 protein2 -sg 0.001 -in /path/to/inp
 | `-in`, `--input_dir` | required | Input directory. The directory need to contain multiple figures(Tif). |
 | `-out`, `--output_dir` | `result` | Output directory. Result png files are made in the specified directory. |
 
-# Example
-command
+## Example
+### command
 ```
 python ColoPlotter.py -in C:\Users\Win10\Documents\test\PGSM_16 -n1 Pep1 -n2 Sec7 -sg 0.00001 -out result\PGSM_16 -t 60
 ```
 
-Output
+### Output
+#### Standard output
 ```
 Merge Rates (denominator = Pep1) : [  4.34782609  43.28358209  12.13235294  18.18181818  27.94117647]
 standard deviation = 13.479265
 Merge Rates (denominator = Sec7) : [  2.22222222  78.37837838  75.          22.22222222  27.53623188]
 standard deviation = 30.300863
 ```
+#### output figures 
+Figure 1  
+<img src="https://github.com/nkimoto/ColoPlotter/blob/intensity_th/example/PGSM_16/Pep1_Sec7_60.0_1.png" alt="ex1" title="ex1" width="400px">  
+Figure 2  
+<img src="https://github.com/nkimoto/ColoPlotter/blob/intensity_th/example/PGSM_16/Pep1_Sec7_60.0_2.png" alt="ex2" title="ex1" width="400px">  
+Figure 3 (high background)  
+<img src="https://github.com/nkimoto/ColoPlotter/blob/intensity_th/example/PGSM_16/Pep1_Sec7_60.0_3.png" alt="ex3" title="ex1" width="400px">  
+Figure 4  
+<img src="https://github.com/nkimoto/ColoPlotter/blob/intensity_th/example/PGSM_16/Pep1_Sec7_60.0_4.png" alt="ex4" title="ex1" width="400px">  
+Figure 5  
+<img src="https://github.com/nkimoto/ColoPlotter/blob/intensity_th/example/PGSM_16/Pep1_Sec7_60.0_5.png" alt="ex5" title="ex1" width="400px">  
+Colocalization Rate Figure  
+<img src="https://github.com/nkimoto/ColoPlotter/blob/intensity_th/example/PGSM_16/Sec7_Pep1_60.0_bar.png" alt="ex5" title="ex1" width="400px">
 
-
+## Discussion
+If figure has high background, this script regard it as high localization (Figure3).  
+In this case, you should try another method.
