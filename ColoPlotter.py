@@ -21,9 +21,9 @@ def read_input(input_dir):
         yield (img[0], img[1])
 
 
-def ThresholdGetter(img_f, threshold_intensity, search_gap):
+def ThresholdGetter(img_f, threshold_p, search_gap):
     size = img_f.size
-    threshold_num = size * threshold / 100
+    threshold_num = size * threshold_p / 100
     print(size)
     print(threshold_num)
     for i in np.arange(1, 0, -1 * search_gap):
@@ -36,7 +36,7 @@ def ThresholdGetter(img_f, threshold_intensity, search_gap):
                 return i
 
 
-def ColoPlotter(input_dir, output_dir, name1, name2, threshold, search_gap, denominator):
+def ColoPlotter(input_dir, output_dir, name1, name2, threshold_p, search_gap, denominator):
     print(input_dir)
     mrate1_list = np.array([])
     mrate2_list = np.array([])
@@ -46,12 +46,8 @@ def ColoPlotter(input_dir, output_dir, name1, name2, threshold, search_gap, deno
         grey2 = rgb2gray(img2)
         img_f1 = img_as_float(grey1)
         img_f2 = img_as_float(grey2)
-        max_intensity1 = img_f1.max()
-        max_intensity2 = img_f2.max()
-        th_intensity1 = max_intensity1 * threshold / 100
-        th_intensity2 = max_intensity2 * threshold / 100
-        more1 = img_f1 > th_intensity1#ThresholdGetter(img_f1, th_intensity1, search_gap)
-        more2 = img_f2 > th_intensity2#ThresholdGetter(img_f2, th_intensity2, search_gap)
+        more1 = img_f1 > ThresholdGetter(img_f1, threshold_p, search_gap)
+        more2 = img_f2 > ThresholdGetter(img_f2, threshold_p, search_gap)
         merge = more1 * more2
         mrate1 = len(merge[merge == 1])/len(more1[more1 == 1]) * 100
         mrate2 = len(merge[merge == 1])/len(more2[more2 == 1]) * 100
@@ -71,7 +67,7 @@ def ColoPlotter(input_dir, output_dir, name1, name2, threshold, search_gap, deno
         axes[1,2].imshow(merge)
         if os.path.exists(output_dir) is False:
             os.makedirs(output_dir)
-        fig.savefig(os.path.join(output_dir, '{}_{}_{}_{}.png'.format(name1, name2, threshold, n + 1)))
+        fig.savefig(os.path.join(output_dir, '{}_{}_{}_{}.png'.format(name1, name2, threshold_p, n + 1)))
 
     else:
         print('Merge Rates (denominator = {}) : '.format(name1), end="")
@@ -102,9 +98,9 @@ def ColoPlotter(input_dir, output_dir, name1, name2, threshold, search_gap, deno
         plt.xlim(xmax = 2.0, xmin = 0)
         plt.bar(left, height, width=1, yerr=sigma, tick_label=label,capsize=10)
         if denominator == 1:
-            plt.savefig(os.path.join(output_dir, "{}_{}_{}_bar.png".format(name1, name2, str(threshold))), format='png', bbox_inches='tight')
+            plt.savefig(os.path.join(output_dir, "{}_{}_{}_bar.png".format(name1, name2, str(threshold_p))), format='png', bbox_inches='tight')
         else:
-            plt.savefig(os.path.join(output_dir, "{}_{}_{}_bar.png".format(name2, name1, str(threshold))), format='png', bbox_inches='tight')
+            plt.savefig(os.path.join(output_dir, "{}_{}_{}_bar.png".format(name2, name1, str(threshold_p))), format='png', bbox_inches='tight')
 
 
 def ArgParse():
@@ -117,7 +113,7 @@ def ArgParse():
     parser.add_argument('-t', '--threshold',
                         dest='threshold',
                         type=float,
-                        default=90.0,
+                        default=5.0,
                         help='Threshold : Least pixel number(%).')
     parser.add_argument('-n1', '--name1',
                         dest='name1',
@@ -151,7 +147,7 @@ if __name__ == "__main__":
                 output_dir=args.out_dir,
                 name1=args.name1,
                 name2=args.name2,
-                threshold=args.threshold,
+                threshold_p=args.threshold,
                 search_gap=args.sg,
                 denominator=args.denominator)
 
